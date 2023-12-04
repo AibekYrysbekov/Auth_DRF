@@ -30,8 +30,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [
-    'authdrf-production.up.railway.app',
-    '127.0.0.1',
+    '*',
+    # 'authdrf-production.up.railway.app',
+    # '127.0.0.1',
 ]
 
 
