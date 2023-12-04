@@ -24,13 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rx*a&v-=y6=*ufq$w^+yua=8nj8@t@l_55^--fn94&l5#3+h@6'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [
     'authdrf-production.up.railway.app',
+    '127.0.0.1',
 ]
 
 
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / os.getenv('DB_NAME'),
     }
 }
 
@@ -162,7 +163,10 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
+
 CORS_ALLOWED_ORIGINS = [
     'https://authdrf-production.up.railway.app',
+    'http://127.0.0.1:8000',
+
 ]
 
