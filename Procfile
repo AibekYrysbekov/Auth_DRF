@@ -1,1 +1,2 @@
-web: gunicorn Auth_DRF.wsgi --log-file -
+web: gunicorn config.wsgi --log-file -
+gunicorn config.wsgi:application
