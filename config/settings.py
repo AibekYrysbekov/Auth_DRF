@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-rx*a&v-=y6=*ufq$w^+yua=8nj8@t@l_55^--fn94&l5#3+h@6
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'authdrf-production.up.railway.app',
+    'https://authdrf-production.up.railway.app/',
 ]
 
 
