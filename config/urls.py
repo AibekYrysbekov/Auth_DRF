@@ -9,4 +9,4 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls.authtoken')),
 ]
 
-urlpatterns.extend(yasg_urls)
+urlpatterns += yasg_urls
