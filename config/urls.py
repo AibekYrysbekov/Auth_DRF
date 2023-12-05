@@ -4,9 +4,9 @@ from .yasg import urlpatterns as yasg_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('rest_framework.urls')),
-    path('api/auth/', include('djoser.urls')),
-    path('api/auth/', include('djoser.urls.authtoken')),
+    # path('', include('rest_framework.urls')),
+    path('', include('users.urls')),
+
 ]
 
 urlpatterns += yasg_urls
