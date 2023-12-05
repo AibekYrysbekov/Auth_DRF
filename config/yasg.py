@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from rest_framework import permissions
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -6,7 +6,7 @@ from drf_yasg.inspectors import SwaggerAutoSchema
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Marketplace",
+        title="Auth DRF",
         default_version='v1',
         description="API documentation",
         terms_of_service="none",
@@ -14,12 +14,13 @@ schema_view = get_schema_view(
         license=openapi.License(name="MIT License"),
     ),
     public=True,
-    permission_classes=[],
+    permission_classes=[permissions.AllowAny,],
     authentication_classes=[],
 )
 
 
 urlpatterns = [
-    path('swagger/', schema_view.with_ui('swagger'), name='swagger'),
-    path('redoc/', schema_view.with_ui('redoc'), name='redoc'),
+   re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
