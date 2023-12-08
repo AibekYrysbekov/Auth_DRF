@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.hashers import make_password
 
 
 class UserManager(BaseUserManager):
@@ -13,6 +14,7 @@ class UserManager(BaseUserManager):
             raise ValueError({'Error: password обязательное поле'})
 
         user = self.model(username=username, email=email, **extra_fields)
+        user.password = make_password(password)
         user.save()
         return user
 
@@ -25,6 +27,7 @@ class UserManager(BaseUserManager):
 class UserModel(models.Model):
     username = models.CharField(max_length=20)
     email = models.EmailField('email address', unique=True)
+    password = models.CharField(max_length=128)
     code = models.PositiveIntegerField(null=True, blank=True)
     is_verify = models.BooleanField(default=False)
 

@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
@@ -7,7 +6,7 @@ from .models import UserModel
 from .serializers import CheckOPTSerializer, RegistrationSerializer, LoginSerializer, LogoutSerializer
 from rest_framework import status, generics, exceptions
 from rest_framework.response import Response
-
+from django.contrib.auth.hashers import check_password
 from .utils import send_otp_email, generate_otp
 
 
@@ -62,9 +61,16 @@ class LoginView(generics.GenericAPIView):
 
     def post(self, request):
         email = request.data.get("email")
+        password = request.data.get("password")
 
         try:
             user = UserModel.objects.get(email=email)
+
+            if not check_password(password, user.password):
+                return Response(
+                    {"error": "Неверный пароль."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
             refresh = RefreshToken.for_user(user)
             return Response(
@@ -72,9 +78,9 @@ class LoginView(generics.GenericAPIView):
                 status=status.HTTP_200_OK,
             )
 
-        except ObjectDoesNotExist:
+        except UserModel.DoesNotExist:
             return Response(
-                {"error": "User with this phone number does not exist. "},
+                {"error": "Пользователь с этой почтой не существует."},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
