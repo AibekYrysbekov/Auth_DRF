@@ -1,9 +1,6 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import UserModel
-from .serializers import CheckOPTSerializer, RegistrationSerializer, LoginSerializer, LogoutSerializer
+from .serializers import CheckOPTSerializer, RegistrationSerializer, LoginSerializer
 from rest_framework import status, generics, exceptions
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
@@ -84,20 +81,3 @@ class LoginView(generics.GenericAPIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
-    serializer_class = LogoutSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        try:
-            refresh_token = serializer.validated_data['refresh']
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"message": "User has been logged out successfully."}, status=status.HTTP_200_OK)
-
-        except TokenError:
-            return Response({"error": "Token is expired or invalid."}, status=status.HTTP_400_BAD_REQUEST)
