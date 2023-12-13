@@ -1,24 +1,17 @@
 version: "3.11"
-
 services:
 
-  db:
-    image: postgres:latest
+  web:
+    container_name: auth_backend
     restart: always
-    env_file:
-      - .env
-    volumes:
-      - "./postgres:/var/lib/postgresql/data"
-
-  app:
-    build: .
-    volumes:
-      - .:/config
-      - ./static:/app/static
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 8000
     ports:
-    - "8000:8000"
-    command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate && gunicorn config.wsgi:application -w 4 -b 0.0.0.0:8000"
+      - "8000:8000"
+    volumes:
+      - .:/backend_neo
     env_file:
       - .env
-    depends_on:
-      - db
